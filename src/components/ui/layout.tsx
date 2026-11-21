@@ -17,14 +17,15 @@ export function PageHeader({ eyebrow, title, description, actions, className }: 
 
 export function Panel({ title, aside, className, bodyClassName, children, id }: { title?: React.ReactNode; aside?: React.ReactNode; className?: string; bodyClassName?: string; children: React.ReactNode; id?: string }) {
   return (
-    <section id={id} className={cn("panel", className)}>
+    <section id={id} className={cn("panel min-w-0", className)}>
       {(title || aside) && (
-        <div className="flex min-h-11 items-center justify-between gap-3 border-b border-line px-4 py-2">
+        <div className="flex min-h-11 flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line px-4 py-2">
           {title && <h2 className="font-sans text-[0.95rem] font-semibold tracking-normal">{title}</h2>}
           {aside && <div className="flex items-center gap-2 text-[0.83rem] text-ink-2">{aside}</div>}
         </div>
       )}
-      <div className={cn("p-4", bodyClassName)}>{children}</div>
+      {/* wide tables scroll inside the panel instead of stretching the page */}
+      <div className={cn("scroll-thin overflow-x-auto p-4", bodyClassName)}>{children}</div>
     </section>
   );
 }

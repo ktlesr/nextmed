@@ -118,6 +118,9 @@
   button:disabled { cursor: not-allowed; }
   * { border-color: var(--line); }
   input[type="date"], input[type="time"], input[type="datetime-local"] { font-family: var(--font-mono); font-size: 0.87rem; }
+  /* Grid items default to min-width:auto, which lets a wide table or scroller stretch its track
+     (and the page) on phones. Let them shrink; the content scrolls inside its own container. */
+  :where(.grid) > * { min-width: 0; }
   dialog { color: inherit; }
   dialog::backdrop { background: rgba(6, 10, 26, 0.55); backdrop-filter: blur(2px); }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
