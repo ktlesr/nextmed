@@ -19,14 +19,14 @@ async function guard(fd: FormData) {
   const { t } = await getT();
   const user = await getUser();
   const type = str(fd, "sourceType") as RecordType, id = str(fd, "sourceId");
-  if (!user || !TYPES.includes(type) || !isUuid(id) || !(await recordEditable(user, type, id))) return { t, error: fail(t("common.forbidden")) } as const;
-  return { t, user, type, id } as const;
+  if (!user || !TYPES.includes(type) || !isUuid(id) || !(await recordEditable(user, type, id))) return { ok: false as const, t, error: fail(t("common.forbidden")) };
+  return { ok: true as const, t, user, type, id };
 }
 
 /** Decision / follow-up task raised from a meeting, travel or procurement file. */
 export async function addFollowUp(_p: ActionState, fd: FormData): Promise<ActionState> {
   const g = await guard(fd);
-  if ("error" in g) return g.error;
+  if (!g.ok) return g.error;
   const text = splitBilingual(str(fd, "text"));
   if (!text.tr && !text.en) return fail(g.t("common.invalid"));
   const due = optStr(fd, "dueDate");
@@ -72,7 +72,7 @@ export async function deleteFollowUp(_p: ActionState, fd: FormData): Promise<Act
 /** Upload TR / EN files (or links) into a meeting, procurement or travel file under a document kind. */
 export async function uploadRecordFiles(_p: ActionState, fd: FormData): Promise<ActionState> {
   const g = await guard(fd);
-  if ("error" in g) return g.error;
+  if (!g.ok) return g.error;
   const kind = str(fd, "kind");
   if (!KINDS[g.type].includes(kind)) return fail(g.t("common.invalid"));
   // invoices and payment proofs are financial documents
@@ -92,7 +92,7 @@ export async function uploadRecordFiles(_p: ActionState, fd: FormData): Promise<
 
 export async function deleteRecordFile(_p: ActionState, fd: FormData): Promise<ActionState> {
   const g = await guard(fd);
-  if ("error" in g) return g.error;
+  if (!g.ok) return g.error;
   const fileId = str(fd, "fileId");
   if (!isUuid(fileId)) return fail(g.t("common.notFound"));
   const [f] = await db.select({ id: files.id, name: files.name, access: files.access, kind: files.kind }).from(files).where(and(eq(files.id, fileId), eq(files.entityType, g.type), eq(files.entityId, g.id)));

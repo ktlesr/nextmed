@@ -10,7 +10,7 @@ import { saveLink, saveUpload } from "@/lib/files";
 import { queueFields, splitBilingual, type Lang } from "@/lib/translate";
 import { getFrame } from "@/lib/structure";
 import { getT } from "@/i18n/server";
-import { KINDS, OBS_STATUSES, QUALIFIERS } from "@/lib/adminOutputs";
+import { KINDS, OBS_STATUSES, QUALIFIERS } from "@/lib/adminOutputConst";
 
 const isDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
 const refresh = (id?: string) => { revalidatePath("/app/outputs"); if (id) revalidatePath(`/app/outputs/${id}`); revalidatePath("/app/admin"); };
@@ -114,7 +114,7 @@ export async function saveTarget(_p: ActionState, fd: FormData): Promise<ActionS
       programmeIndicator: optStr(fd, "programmeIndicator")?.toUpperCase() ?? null,
       sources: { application_form_pages: numList(str(fd, "pages")), zafer_matrix_subactivities: codeList(str(fd, "matrix")) },
       countingNoteTr: optStr(fd, "countingNoteTr"), countingNoteEn: optStr(fd, "countingNoteEn"),
-      priority: fd.get("priority") === "on", active: fd.get("active") !== "off", updatedAt: new Date(),
+      priority: fd.get("priority") === "on", active: fd.get("active") === "on", updatedAt: new Date(),
     };
     if (!id) {
       const newId = `concrete-${crypto.randomUUID()}`;
