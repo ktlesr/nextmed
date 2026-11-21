@@ -22,12 +22,12 @@ import { cn } from "@/lib/cn";
 
 export const metadata = { title: "Aylık Raporlama" };
 
-function CellView({ c, t }: { c: Cell; t: TFn }) {
-  if (typeof c === "string") return <span className="whitespace-pre-line">{c}</span>;
+function CellView({ c, t, nowrap }: { c: Cell; t: TFn; nowrap?: boolean }) {
+  if (typeof c === "string") return <span className={nowrap ? "whitespace-nowrap" : "whitespace-pre-line"}>{c}</span>;
   if (c.files) return c.files.length ? <FileList files={c.files} t={t} compact /> : <span className="text-ink-3">—</span>;
   if (c.status) return <Badge tone={workLogTone[c.status] ?? "neutral"} dot>{c.text}</Badge>;
   if (c.tone) return <Badge tone={c.tone}>{c.text}</Badge>;
-  return <span className={cn("whitespace-pre-line", c.strong && "font-semibold")}>{c.text}</span>;
+  return <span className={cn(nowrap ? "whitespace-nowrap" : "whitespace-pre-line", c.strong && "font-semibold")}>{c.text}</span>;
 }
 
 function SectionView({ s, t }: { s: Section; t: TFn }) {
@@ -41,9 +41,9 @@ function SectionView({ s, t }: { s: Section; t: TFn }) {
           <table className="tbl">
             <thead><tr>{tb.head.map((h, i) => <th key={i} className={cn(h.align === "r" && "r", h.wide && "min-w-64")}>{h.label}</th>)}</tr></thead>
             <tbody>
-              {tb.rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j} className={cn(tb.head[j]?.align === "r" && "r", tb.head[j]?.mono && "num whitespace-nowrap text-[0.84rem]")}><CellView c={c} t={t} /></td>)}</tr>)}
+              {tb.rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j} className={cn(tb.head[j]?.align === "r" && "r", tb.head[j]?.mono && "num whitespace-nowrap text-[0.84rem]")}><CellView c={c} t={t} nowrap={tb.head[j]?.mono} /></td>)}</tr>)}
             </tbody>
-            {tb.foot && <tfoot>{tb.foot.map((r, i) => <tr key={i} className="bg-surface-2/60">{r.map((c, j) => <td key={j} className={cn("border-t border-line", tb.head[j]?.align === "r" && "r", (j > 0 || tb.head[j]?.mono) && "num")}><CellView c={c} t={t} /></td>)}</tr>)}</tfoot>}
+            {tb.foot && <tfoot>{tb.foot.map((r, i) => <tr key={i} className="bg-surface-2/60">{r.map((c, j) => <td key={j} className={cn("border-t border-line", tb.head[j]?.align === "r" && "r", j > 0 && "num")}><CellView c={c} t={t} nowrap /></td>)}</tr>)}</tfoot>}
           </table>
         </div>
       )}
