@@ -9,7 +9,7 @@ günlük çalışmasını, somut çıktı hedeflerini ve mali kayıtlarını izl
 
 ```bash
 cp .env.example .env            # DATABASE_URL ve geçici parola
-docker compose up -d db         # ya da kendi PostgreSQL 16 sunucunuz
+docker compose -f docker-compose.dev.yml up -d   # ya da kendi PostgreSQL 16 sunucunuz
 npm install
 npm run db:setup                # şema + data/seed.v3.json içe aktarımı + kullanıcı hesapları
 npm run dev                     # http://localhost:3000
@@ -33,6 +33,35 @@ E‑posta adresleri ve yetkiler **Yönetim → Ekip ve Roller** ekranından düz
 
 Proje başlangıç tarihi kurulumda **boştur**. Admin tarihi **Yönetim → Proje Ayarları** ekranından girer; 36 proje ayının
 takvim karşılıkları bu tek tarihten hesaplanır ve ardından başlangıç planı (baseline) kaydedilir.
+
+## Dokploy ile yayına alma
+
+Depo, Dokploy'un **Compose** hizmeti olarak doğrudan yayınlanacak şekilde hazırdır (`docker-compose.yml` + `Dockerfile`).
+
+1. Dokploy'da **Create Service → Compose** seçin; kaynak olarak bu GitHub deposunu ve dalı gösterin.
+   Compose yolu varsayılan `./docker-compose.yml` olarak kalır.
+2. **Environment** sekmesine şunları girin:
+
+   ```env
+   POSTGRES_PASSWORD=<güçlü bir veritabanı parolası>
+   SEED_DEFAULT_PASSWORD=<ilk hesapların geçici parolası>
+   # isteğe bağlı
+   ANTHROPIC_API_KEY=            # otomatik TR↔EN çeviri için
+   RUN_SEED=true                 # ilk kurulumdan sonra false yapılabilir
+   ```
+
+3. **Domains** sekmesinde alan adını `app` hizmetine, **3000** portuna bağlayın ve HTTPS (Let's Encrypt) açın.
+4. **Deploy**. Kapsayıcı her açılışta bekleyen göçleri uygular, başlangıç verisini çoğaltmadan içe aktarır
+   (portalda yapılan düzenlemeler, gerçekleşmeler, dosyalar ve başlangıç planları korunur) ve sunucuyu başlatır.
+
+Notlar
+
+- Veritabanı `pgdata` adlı kalıcı birimde tutulur; yüklenen kanıt dosyaları da veritabanındadır, bu yüzden
+  yedekleme için Dokploy'un **Backups** özelliğiyle `db` hizmetini (PostgreSQL dökümü) yedeklemek yeterlidir.
+- Sağlık denetimi: `GET /api/health` (veritabanı bağlantısını da sınar).
+- Oturum çerezi üretimde `Secure` işaretlidir; portal HTTPS arkasında yayınlanmalıdır.
+- Dokploy'un yönetilen PostgreSQL hizmetini kullanmak isterseniz **Application** (Dockerfile) türünde hizmet
+  oluşturup yalnızca `DATABASE_URL` ve `SEED_DEFAULT_PASSWORD` değişkenlerini vermeniz yeterlidir.
 
 ## Modüller
 

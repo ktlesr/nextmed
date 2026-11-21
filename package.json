@@ -11,7 +11,8 @@
     "db:migrate": "tsx scripts/migrate.mts",
     "db:seed": "tsx scripts/seed.mts",
     "db:setup": "tsx scripts/migrate.mts && tsx scripts/seed.mts",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "build:scripts": "esbuild scripts/migrate.mts scripts/seed.mts --bundle --platform=node --format=esm --target=node22 --outdir=dist-scripts --out-extension:.js=.mjs --external:pg-native --banner:js=\"import{createRequire as __cr}from'module';const require=__cr(import.meta.url);\""
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
@@ -36,9 +37,13 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "drizzle-kit": "^0.31.11",
+    "esbuild": "^0.28.2",
     "postcss": "^8.5.33",
     "tailwindcss": "^4.3.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
