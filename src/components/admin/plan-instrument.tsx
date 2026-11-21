@@ -32,7 +32,7 @@ export function PlanInstrument({ lanes, duration, periodMonth, monthWord, captio
                 const n = lane.counts[i + 1] ?? 0;
                 return (
                   <div key={i} className="flex h-full flex-1 items-end px-[1.5px]" title={`${monthWord} ${i + 1}: ${n}`}>
-                    {n > 0 && <span className="w-full rounded-[1px]" style={{ height: `${Math.max(8, (n / max) * 100)}%`, background: lane.color, opacity: periodMonth != null && i + 1 > periodMonth ? 0.38 : 1 }} />}
+                    {n > 0 && <span className="w-full rounded-[1px]" style={{ height: `${Math.max(10, Math.sqrt(n / max) * 100)}%`, background: lane.color, opacity: periodMonth != null && i + 1 > periodMonth ? 0.38 : 1 }} />}
                   </div>
                 );
               })}

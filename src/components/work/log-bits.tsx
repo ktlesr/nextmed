@@ -41,8 +41,8 @@ export function OutsidePlanFlag({ t }: { t: TFn }) {
 /** One record as a ledger line: duration | what | status + actions. */
 export function LogLine({ log, locale, t, files, duration, actions, showPerson, href }: { log: LogRow; locale: Locale; t: TFn; files?: FileMeta[]; duration: string; actions?: React.ReactNode; showPerson?: boolean; href?: string }) {
   return (
-    <div className="grid grid-cols-[4.6rem_1fr] gap-x-4 gap-y-2 border-b border-line py-3 last:border-b-0 md:grid-cols-[4.6rem_1fr_auto]">
-      <p className="num pt-0.5 text-[0.95rem] font-medium">{duration}</p>
+    <div className="grid grid-cols-[5.8rem_1fr] gap-x-4 gap-y-2 border-b border-line py-3 last:border-b-0 md:grid-cols-[5.8rem_1fr_auto]">
+      <p className="num whitespace-nowrap pt-0.5 text-[0.92rem] font-medium">{duration}</p>
       <div className="min-w-0">
         {showPerson && <p className="mb-0.5 text-[0.86rem] font-semibold">{log.personName}</p>}
         <ChainLine log={log} locale={locale} />

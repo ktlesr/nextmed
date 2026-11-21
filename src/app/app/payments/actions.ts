@@ -37,7 +37,7 @@ export async function savePayment(_p: ActionState, fd: FormData): Promise<Action
     } else {
       [{ id: rowId }] = await db.insert(expectedPayments).values({ ...values, createdBy: user.id }).returning({ id: expectedPayments.id });
     }
-    try { await saveEvidence(fd, { entityType: "payment", entityId: rowId!, kind: "basis", access: "team", uploadedBy: user.id }); } catch (e) { return fileError(e, t); }
+    try { await saveEvidence(fd, { entityType: "payment", entityId: rowId!, access: "team", uploadedBy: user.id }); } catch (e) { return fileError(e, t); }
     await queueFields("expected_payments", rowId!, { note });
     revalidatePath("/app/payments");
     return ok(t("common.saved"));

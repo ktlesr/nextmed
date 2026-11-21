@@ -144,7 +144,7 @@ export default async function CostsPage({ searchParams }: { searchParams: Promis
         </table>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+      <div className="flex flex-col gap-6">
         <Panel title={t("finance.budgetTitle")} aside={<span className="num">PP5</span>}>
           <div className="grid grid-cols-2 gap-x-6 gap-y-6 lg:grid-cols-4">
             <Stat label={t("finance.approvedBudget")} value={<span className="text-[1.35rem]">{fmtMoney(locale, b.approved_partner_budget_eur)}</span>} sub={t("finance.partnerShare", { pct: fmtPercent(locale, b.partner_contribution_rate), amount: fmtMoney(locale, b.approved_partner_budget_eur * b.partner_contribution_rate) })} />
@@ -187,7 +187,7 @@ export default async function CostsPage({ searchParams }: { searchParams: Promis
           <p className="mt-3 text-[0.8rem] text-ink-3">{t("finance.wpRule")}</p>
         </Panel>
 
-        <div className="flex flex-col gap-6">
+        <div className="grid gap-6 lg:grid-cols-2">
           <Panel title={t("finance.hourlyRates")}>
             <ActionForm action={saveHourlyRates} closeOnOk={false} className="flex flex-col gap-2.5">
               {hourly.map((p) => (

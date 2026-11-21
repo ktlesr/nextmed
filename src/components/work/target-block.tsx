@@ -51,11 +51,11 @@ export function TargetBlock({ target, totals, t, locale }: { target: MonthlyTarg
         </div>
       </div>
       {has && <Meter value={totals.approved} max={goal} pending={totals.inReview} tone={pct >= 1 ? "ok" : "cobalt"} className="mt-4 h-3" label={t("work.progress")} />}
-      <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-4 sm:grid-cols-5">
+      <dl className="mt-5 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-line pt-4 sm:grid-cols-3 2xl:grid-cols-5">
         {cells.map(([k, v, c]) => (
           <div key={k}>
             <dt className="label">{k}</dt>
-            <dd className={`num mt-1 text-[1.05rem] font-medium ${c ?? ""}`}>{v}</dd>
+            <dd className={`num mt-1 whitespace-nowrap text-[0.98rem] font-medium ${c ?? ""}`}>{v}</dd>
           </div>
         ))}
       </dl>

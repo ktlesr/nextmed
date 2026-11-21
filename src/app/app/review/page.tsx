@@ -7,7 +7,7 @@ import { getT } from "@/i18n/server";
 import { EmptyState, PageHeader, Stat, TabLinks } from "@/components/ui/layout";
 import { Badge } from "@/components/ui/badge";
 import { LogLine } from "@/components/work/log-bits";
-import { ApproveButton, CancelButton, ReturnButton } from "@/components/work/row-actions";
+import { ApproveButton, ReturnButton } from "@/components/work/row-actions";
 
 export const metadata = { title: "İnceleme Kuyruğu" };
 
@@ -69,7 +69,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: Promi
                     <div className="min-w-0 px-4">
                       {rows.map((l) => (
                         <LogLine key={l.id} log={l} locale={locale} t={t} files={files.get(l.id)} duration={fmtDuration(locale, l.minutes)} href={`/app/work/${l.id}`}
-                          actions={current === "queue" ? <><ApproveButton ids={[l.id]} /><ReturnButton id={l.id} /><CancelButton id={l.id} /></> : undefined} />
+                          actions={current === "queue" ? <><ApproveButton ids={[l.id]} /><ReturnButton id={l.id} /></> : undefined} />
                       ))}
                     </div>
                   </div>

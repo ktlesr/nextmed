@@ -84,12 +84,12 @@ function FormBody({ options, assignedSubIds, today, minDate, initial, initialRem
   );
 }
 
-export function WorkLogButton(props: Props & { disabledReason?: string | null; size?: "sm" | "md" }) {
+export function WorkLogButton(props: Props & { disabledReason?: string | null; size?: "sm" | "md"; quiet?: boolean }) {
   const { t } = useT();
   const edit = !!props.initial.id;
   if (props.disabledReason) return <span className="text-[0.85rem] text-ink-3">{props.disabledReason}</span>;
   return (
-    <Modal side trigger={edit ? <><Pencil className="size-3.5" />{t("common.edit")}</> : <><Plus className="size-4" />{t("work.new")}</>} triggerVariant={edit ? "secondary" : "primary"} triggerSize={props.size ?? (edit ? "sm" : "md")}
+    <Modal side trigger={edit ? <><Pencil className="size-3.5" />{t("common.edit")}</> : props.quiet ? <><Plus className="size-3.5" />{t("common.add")}</> : <><Plus className="size-4" />{t("work.new")}</>} triggerVariant={edit || props.quiet ? "secondary" : "primary"} triggerSize={props.size ?? (edit ? "sm" : "md")}
       title={edit ? t("work.editTitle") : t("work.newTitle")} description={t("work.formLede")}>
       <FormBody {...props} />
     </Modal>

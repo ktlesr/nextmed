@@ -64,7 +64,7 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
   const formBase = { options, assignedSubIds, today, minDate: project.startDate, limit, step };
   const startMissing = !project.startDate;
   const newButton = (date: string, size: "sm" | "md" = "md") => (
-    <WorkLogButton {...formBase} size={size} initial={{ workDate: date }} initialRemaining={Math.max(0, limit - (date === today ? todayUsed : dayTotal.get(date) ?? 0))} disabledReason={startMissing ? t("work.needStartShort") : null} />
+    <WorkLogButton {...formBase} size={size} quiet={size === "sm"} initial={{ workDate: date }} initialRemaining={Math.max(0, limit - (date === today ? todayUsed : dayTotal.get(date) ?? 0))} disabledReason={startMissing ? t("work.needStartShort") : null} />
   );
 
   const rowActions = (l: LogRow) => {

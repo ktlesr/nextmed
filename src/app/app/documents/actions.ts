@@ -152,19 +152,3 @@ export async function deleteDocument(_p: ActionState, fd: FormData): Promise<Act
   revalidatePath("/app/documents");
   return ok(t("common.deleted"));
 }
-
-export async function deleteDocumentFile(_p: ActionState, fd: FormData): Promise<ActionState> {
-  const { t } = await getT();
-  const user = await getUser();
-  const fileId = str(fd, "fileId");
-  if (!user || !isUuid(fileId)) return fail(t("common.forbidden"));
-  const [f] = await db.select({ id: files.id, entityId: files.entityId, name: files.name }).from(files).where(and(eq(files.id, fileId), eq(files.entityType, "document")));
-  const [doc] = f && isUuid(f.entityId) ? await db.select().from(documents).where(eq(documents.id, f.entityId)) : [];
-  if (!f || !doc || !mayEdit(user, doc)) return fail(t("common.forbidden"));
-  const [{ n }] = await db.select({ n: sql<number>`count(*)::int` }).from(files).where(and(eq(files.entityType, "document"), eq(files.entityId, doc.id)));
-  if (n <= 1) return fail(t("docs.lastFile"));
-  await db.delete(files).where(eq(files.id, fileId));
-  await audit({ userId: user.id, entity: "files", entityId: fileId, action: "delete", before: { name: f.name, documentId: doc.id } });
-  revalidatePath("/app/documents");
-  return ok();
-}

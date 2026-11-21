@@ -128,7 +128,9 @@ export async function saveTarget(_p: ActionState, fd: FormData): Promise<ActionS
     if (!before) return fail(t("common.notFound"));
     const prev = { nameTr: before.nameTr, nameEn: before.nameEn, projectTarget: before.projectTarget, zaferObligation: before.zaferObligation, workPackageIds: before.workPackageIds, activityId: before.activityId, programmeIndicator: before.programmeIndicator, sources: before.sources, countingNoteTr: before.countingNoteTr, countingNoteEn: before.countingNoteEn, priority: before.priority, active: before.active };
     const next = { ...values, updatedAt: undefined };
-    const changed = (Object.keys(prev) as (keyof typeof prev)[]).filter((k) => JSON.stringify(prev[k] ?? null) !== JSON.stringify((next as Record<string, unknown>)[k] ?? null));
+    // jsonb does not keep key order — compare canonically
+    const canon = (v: unknown): unknown => Array.isArray(v) ? v.map(canon) : v && typeof v === "object" ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, canon((v as Record<string, unknown>)[k])])) : v ?? null;
+    const changed = (Object.keys(prev) as (keyof typeof prev)[]).filter((k) => JSON.stringify(canon(prev[k])) !== JSON.stringify(canon((next as Record<string, unknown>)[k])));
     if (!changed.length) return ok(t("outputs.noChange"));
     const snapshot = Object.fromEntries(changed.map((k) => [k, prev[k]]));
     await db.update(concreteOutputs).set({ ...values, history: [...before.history, { at: new Date().toISOString(), by: user.fullName, before: snapshot }] }).where(eq(concreteOutputs.id, id));
