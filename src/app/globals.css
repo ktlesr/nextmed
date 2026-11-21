@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque/wght.css";
+@import "@fontsource-variable/schibsted-grotesk/wght.css";
+@import "@fontsource/ibm-plex-mono/latin-400.css";
+@import "@fontsource/ibm-plex-mono/latin-ext-400.css";
+@import "@fontsource/ibm-plex-mono/latin-500.css";
+@import "@fontsource/ibm-plex-mono/latin-ext-500.css";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+  PDS4NextMed — "Sır" (glaze) design language.
+  Palette comes from Kütahya çini: porcelain ground, cobalt ink, turquoise glaze, a single fired-red
+  accent. Structure comes from the project itself: everything hangs on a 36-month ruler.
+  Hairlines instead of shadows, 3px corners, mono numerals for anything that is counted or coded.
+*/
+:root {
+  --bg: #f1f4f8;
+  --surface: #ffffff;
+  --surface-2: #e8edf3;
+  --surface-3: #dde4ec;
+  --ink: #0d1a3a;
+  --ink-2: #414e6b;
+  --ink-3: #76819a;
+  --line: #d3dae4;
+  --line-2: #b9c3d1;
+  --cobalt: #1a3fc0;
+  --cobalt-soft: #e3e9fb;
+  --on-cobalt: #ffffff;
+  --turq: #0b8f95;
+  --turq-soft: #d9f0ef;
+  --red: #cf4127;
+  --red-soft: #fbe5df;
+  --ok: #1c7f55;
+  --ok-soft: #dcf1e6;
+  --warn: #a96a0b;
+  --warn-soft: #f8ebcf;
+  --wp-1: #1a3fc0;
+  --wp-2: #0b8f95;
+  --wp-3: #cf4127;
+  --wp-4: #b98207;
+  --wp-5: #7a3d9c;
+  --wp-6: #2c8a4b;
+  --grid: rgba(13, 26, 58, 0.07);
+  --focus: #1a3fc0;
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --bg: #080d1f;
+  --surface: #0e1630;
+  --surface-2: #151f40;
+  --surface-3: #1d2950;
+  --ink: #e8edf9;
+  --ink-2: #a7b3cf;
+  --ink-3: #6c789a;
+  --line: #222e55;
+  --line-2: #33416f;
+  --cobalt: #86a1ff;
+  --cobalt-soft: #1a2657;
+  --on-cobalt: #070c1d;
+  --turq: #45cdc7;
+  --turq-soft: #0f3340;
+  --red: #ff8163;
+  --red-soft: #3b1a1c;
+  --ok: #56cf95;
+  --ok-soft: #0f3229;
+  --warn: #f0b34a;
+  --warn-soft: #382a10;
+  --wp-1: #86a1ff;
+  --wp-2: #45cdc7;
+  --wp-3: #ff8163;
+  --wp-4: #f0b34a;
+  --wp-5: #c58ae6;
+  --wp-6: #6fd08a;
+  --grid: rgba(232, 237, 249, 0.07);
+  --focus: #86a1ff;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-cobalt: var(--cobalt);
+  --color-cobalt-soft: var(--cobalt-soft);
+  --color-on-cobalt: var(--on-cobalt);
+  --color-turq: var(--turq);
+  --color-turq-soft: var(--turq-soft);
+  --color-red: var(--red);
+  --color-red-soft: var(--red-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --font-display: "Bricolage Grotesque Variable", "Schibsted Grotesk Variable", system-ui, sans-serif;
+  --font-sans: "Schibsted Grotesk Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+}
+
+@layer base {
+  html { background: var(--bg); color: var(--ink); font-family: var(--font-sans); font-size: 15px; -webkit-text-size-adjust: 100%; }
+  body { min-height: 100dvh; line-height: 1.5; font-feature-settings: "ss01", "cv05"; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em; line-height: 1.12; text-wrap: balance; }
+  ::selection { background: var(--cobalt); color: var(--on-cobalt); }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  * { border-color: var(--line); }
+  input[type="date"], input[type="time"], input[type="datetime-local"] { font-family: var(--font-mono); font-size: 0.87rem; }
+  dialog { color: inherit; }
+  dialog::backdrop { background: rgba(6, 10, 26, 0.55); backdrop-filter: blur(2px); }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+}
+
+@layer components {
+  /* Mono micro-label: field labels, column heads, eyebrows. */
+  .label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .code { font-family: var(--font-mono); font-size: 0.8em; font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .control {
+    width: 100%; background: var(--surface); color: var(--ink); border: 1px solid var(--line-2); border-radius: 3px;
+    padding: 0.48rem 0.65rem; font-size: 0.93rem; line-height: 1.35; transition: border-color 0.12s, box-shadow 0.12s;
+  }
+  .control::placeholder { color: var(--ink-3); }
+  .control:hover { border-color: var(--ink-3); }
+  .control:focus { outline: none; border-color: var(--cobalt); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cobalt) 22%, transparent); }
+  .control:disabled, .control[readonly] { background: var(--surface-2); color: var(--ink-2); border-style: dashed; }
+  select.control { appearance: none; padding-right: 1.9rem; background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%); background-position: calc(100% - 15px) 52%, calc(100% - 10px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
+  textarea.control { min-height: 5.5rem; resize: vertical; }
+  input[type="file"].control { padding: 0.3rem; font-size: 0.82rem; }
+  input[type="file"].control::file-selector-button { font: inherit; margin-right: 0.6rem; padding: 0.25rem 0.6rem; border: 1px solid var(--line-2); border-radius: 2px; background: var(--surface-2); color: var(--ink); cursor: pointer; }
+
+  /* Ledger table */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .tbl th { text-align: left; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase; font-weight: 500; color: var(--ink-3); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--ink); white-space: nowrap; background: var(--surface); }
+  .tbl td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tbl tbody tr:last-child td { border-bottom: 0; }
+  .tbl tbody tr:hover td { background: color-mix(in srgb, var(--cobalt) 4%, transparent); }
+  .tbl .r { text-align: right; }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; }
+  .rule-top { border-top: 1px solid var(--ink); }
+
+  /* 36-month ruler ticks, reused as a quiet texture. */
+  .ticks { background-image: repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px calc(100% / 36)); }
+  .hatch { background-image: repeating-linear-gradient(135deg, transparent 0 4px, color-mix(in srgb, currentColor 35%, transparent) 4px 5px); }
+
+  .scroll-thin { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rise { animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.grow-x { transform-origin: left; animation: grow-x 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@media print {
+  :root { --bg: #fff; --surface: #fff; }
+  .no-print { display: none !important; }
+  html { font-size: 11px; }
+  .panel, .tbl-wrap { border-color: #999; }
+  main { padding: 0 !important; }
+}
