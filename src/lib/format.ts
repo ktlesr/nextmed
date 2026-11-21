@@ -17,8 +17,13 @@ export const fmtMonthYear = (locale: Locale, year: number, month1: number) =>
   new Intl.DateTimeFormat(fmtLocale(locale), { timeZone: "UTC", month: "long", year: "numeric" }).format(new Date(Date.UTC(year, month1 - 1, 1)));
 export const fmtNumber = (locale: Locale, n: number, digits = 0) =>
   new Intl.NumberFormat(fmtLocale(locale), { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(n);
-export const fmtMoney = (locale: Locale, n: number | string | null | undefined, currency = "EUR") =>
-  n == null || n === "" ? "—" : new Intl.NumberFormat(fmtLocale(locale), { style: "currency", currency, minimumFractionDigits: 2 }).format(Number(n));
+const CURRENCY_SIGN: Record<string, string> = { EUR: "€", TRY: "₺", USD: "$", GBP: "£" };
+/** Turkish convention puts the sign after the amount: 430.800,00 € */
+export const fmtMoney = (locale: Locale, n: number | string | null | undefined, currency = "EUR") => {
+  if (n == null || n === "") return "—";
+  if (locale === "tr") return `${fmtNumber(locale, Number(n), 2)} ${CURRENCY_SIGN[currency] ?? currency}`;
+  return new Intl.NumberFormat(fmtLocale(locale), { style: "currency", currency, minimumFractionDigits: 2 }).format(Number(n));
+};
 export const fmtPercent = (locale: Locale, ratio: number, digits = 0) =>
   new Intl.NumberFormat(fmtLocale(locale), { style: "percent", minimumFractionDigits: digits, maximumFractionDigits: digits }).format(ratio);
 
