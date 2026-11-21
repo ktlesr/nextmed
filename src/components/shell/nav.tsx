@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,7 +19,7 @@ function Items({ groups, onNavigate }: { groups: NavGroup[]; onNavigate?: () => 
   const path = usePathname();
   const all = groups.flatMap((g) => g.items.map((i) => i.href));
   // the longest matching href wins so /app/admin does not light up for /app/admin/team
-  const active = all.filter((h) => path === h || path.startsWith(h + "/")).sort((a, b) => b.length - a.length)[0];
+  const active = all.filter((h) => path === h || (h !== "/app" && path.startsWith(h + "/"))).sort((a, b) => b.length - a.length)[0];
   return (
     <nav className="scroll-thin flex-1 overflow-y-auto px-2.5 pb-6">
       {groups.map((g) => (
@@ -58,11 +59,21 @@ export function Sidebar({ groups, sub, footer }: { groups: NavGroup[]; sub: stri
 
 export function MobileNav({ groups, sub, menuLabel }: { groups: NavGroup[]; sub: string; menuLabel: string }) {
   const [open, setOpen] = useState(false);
+  // Lock page scroll while the drawer is open; close on Escape.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
+  }, [open]);
   return (
     <>
       <button type="button" onClick={() => setOpen(true)} aria-label={menuLabel} className="grid size-9 place-items-center rounded-sm border border-line-2 text-ink-2 lg:hidden"><Menu className="size-5" /></button>
-      {open && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+      {/* The header's backdrop-filter would trap a fixed child inside it, so the drawer is portalled to <body>. */}
+      {open && createPortal(
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={menuLabel}>
           <div className="absolute inset-0 bg-[#060a1a]/60" onClick={() => setOpen(false)} />
           <div className="absolute inset-y-0 left-0 flex w-[17rem] max-w-[85vw] flex-col border-r border-line bg-surface">
             <div className="flex h-14 items-center justify-between border-b border-line px-5">
@@ -71,7 +82,8 @@ export function MobileNav({ groups, sub, menuLabel }: { groups: NavGroup[]; sub:
             </div>
             <Items groups={groups} onNavigate={() => setOpen(false)} />
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
